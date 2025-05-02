@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EquationLab - Aprenda com IA</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen text-center">
+    <h1 class="text-4xl font-bold text-blue-600 mb-4">Bem-vindo ao EquationLab</h1>
+    <p class="text-lg text-gray-700 mb-6">A melhor plataforma para aprender Matemática e Química com IA!</p>
+    
+    <div id="auth-container">
+        
+        <a href="entrada.html" class="bg-green-500 text-white px-6 py-3 rounded text-lg font-semibold hover:bg-green-600">Entrar</a>
+        <!--<button id="login-btn" class="bg-blue-500 text-white px-4 py-2 rounded">Entrar com Google</button>-->
+        <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded hidden">Sair</button>
+        <p id="user-info" class="text-lg text-gray-800 mt-2"></p>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSA402itHWuYCK4PRQhkFXYuFrKypYvzg",
+            authDomain: "AIzaSyBSA402itHWuYCK4PRQhkFXYuFrKypYvzg",
+            projectId: "equationlab-algebraicavengers",
+            storageBucket: "equationlab-algebraicavengers.firebasestorage.app",
+            messagingSenderId: "29458753661",
+            appId: "1:29458753661:web:6ad5dba16d545ad7716914"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
+        
+        document.getElementById("login-btn").addEventListener("click", () => {
+            auth.signInWithPopup(provider).then(result => {
+                document.getElementById("user-info").innerText = `Olá, ${result.user.displayName}`;
+                document.getElementById("login-btn").classList.add("hidden");
+                document.getElementById("logout-btn").classList.remove("hidden");
+            }).catch(error => console.error("Erro ao fazer login", error));
+        });
+        
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            auth.signOut().then(() => {
+                document.getElementById("user-info").innerText = "";
+                document.getElementById("login-btn").classList.remove("hidden");
+                document.getElementById("logout-btn").classList.add("hidden");
+            });
+        });
+    </script>
+</body>
+</html>

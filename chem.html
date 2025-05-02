@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Química - EquatinoLab</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen text-center">
+    <h1 class="text-4xl font-bold text-red-600 mb-6">Pergunte sobre Química</h1>
+    <p class="text-lg text-gray-700 mb-4">Digite sua pergunta e clique em "Go" para obter uma resposta da IA.</p>
+    
+    <form id="chemistry-form" class="w-full max-w-md">
+        <textarea id="question" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" rows="4" placeholder="Digite sua pergunta aqui..."></textarea>
+        <button type="submit" class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg text-lg font-semibold hover:bg-red-600">Go</button>
+    </form>
+    
+    <div id="response" class="mt-6 text-lg text-gray-800 font-medium"></div>
+
+    <script>
+        document.getElementById("chemistry-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const question = document.getElementById("question").value;
+            if (!question.trim()) {
+                alert("Por favor, insira uma pergunta!");
+                return;
+            }
+            
+            document.getElementById("response").innerText = "Processando...";
+            
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                
+                },
+                body: JSON.stringify({
+                    model: "gpt-4-turbo",
+                    messages: [{ role: "user", content: question }],
+                    max_tokens: 150
+                })
+            });
+            
+            const data = await response.json();
+            document.getElementById("response").innerText = data.choices[0].message.content;
+        });
+    </script>
+</body>
+</html>
